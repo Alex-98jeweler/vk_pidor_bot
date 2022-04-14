@@ -26,3 +26,10 @@ KEYBOARD = {
         ],
     ]
 }
+
+COMMAND = {
+    '{"button":"1"}': None, 
+    '{"button":"2"}': None,
+    '{"button":"3"}': None,
+    '{"button":"3"}': None,
+}
