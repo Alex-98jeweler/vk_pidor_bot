@@ -1,8 +1,8 @@
-GROUP_ID = 212216280
+GROUP_ID = "your group id. must be integer"
 
 KEYBOARD = {}
 
-TOKEN = "67551833ab9353f9013192edf4394ade976f874adddfc5a3a0a87b08005df6ea3235b09390c2714f26fdd"
+TOKEN = "your token"
 
 KEYBOARD = {
     "one_time": False,
