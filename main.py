@@ -1,30 +1,22 @@
-from db import DB
-from vk_bot import VkBot
-from config import KEYBOARD, TOKEN, GROUP_ID
-from parser import *
+from controller import Controller
+from config import KEYBOARD
+from parser import get_peer_id, get_users
 from models import Base
 
-bot = VkBot(TOKEN, GROUP_ID)
-db = DB()
+controller = Controller()
 
+for event in controller.vk.lp.listen():
+    print(event.message)
+    if event.message:
+        if ('action' in event.message and event.message['action']['type'] == "chat_invite_user"):
+            try:
+                Base.metadata.create_all(controller.db.engine)
+            except:
+                pass
+            controller.vk.send_message(get_peer_id(event.message), "Клавиатура для запуска бота, перед запуском не забудь назначить администратором беседы", keyboard=controller.vk.get_keyboard(KEYBOARD))
+            chat_id = get_peer_id(event.message)
+            controller.db.add_chat(chat_id)
+            controller.db.add_call_bot(chat_id)
 
-print(db.get_users(2000000002))
-# for event in bot.lp.listen():
-#     print(event.message)
-#     if event.message:
-#         if ('action' in event.message and event.message['action']['type'] == "chat_invite_user"):
-#             try:
-#                 Base.metadata.create_all(db.engine)
-#             except:
-#                 pass
-#             bot.send_message(get_peer_id(event.message), "Hi", keyboard=bot.get_keyboard(KEYBOARD))
-#             chat_id = get_peer_id(event.message)
-#             db.add_chat(chat_id)
-#             db.add_call_bot(chat_id)
-#         if 'payload' in event.message:
-#             get_command(event.message)
         
-    
-
-
-db.connect.close()
+controller.db.connect.close()

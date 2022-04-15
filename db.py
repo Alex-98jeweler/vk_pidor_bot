@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 
 class DB():
 
@@ -19,3 +20,7 @@ class DB():
 
     def add_call_bot(self, chat_id):
         self.connect.execute(f"INSERT INTO call_bot(last_call_pid, last_call_pretty, chat_id) VALUES('2000-11-11','2000-11-11','{chat_id}');")
+
+    def update_call_bot(self, column: str, chat_id):
+        self.connect.execute(f"UPDATE call_bot SET {column}='{datetime.now()}' WHERE call_bot.chat_id={chat_id};")
+        
