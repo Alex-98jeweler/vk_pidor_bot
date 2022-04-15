@@ -28,8 +28,8 @@ KEYBOARD = {
 }
 
 COMMAND = {
-    '{"button":"1"}': None, 
-    '{"button":"2"}': None,
-    '{"button":"3"}': None,
-    '{"button":"3"}': None,
+    '{"button":"1"}': contr.choice_pid, 
+    '{"button":"2"}': contr.choice_pretty,
+    '{"button":"3"}': contr.top_pid,
+    '{"button":"3"}': contr.top_pretty,
 }
