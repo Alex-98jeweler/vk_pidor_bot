@@ -1,3 +1,4 @@
+from time import strftime, strptime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
@@ -5,7 +6,7 @@ from datetime import datetime
 class DB():
 
     def __init__(self) -> None:
-        self.engine = create_engine('sqlite:///bot.db', echo=True)
+        self.engine = create_engine('sqlite:///bot.db')
         self.connect = self.engine.connect()
 
     def add_user(self, first_name, last_name, vk_id, chat_id):
@@ -24,3 +25,6 @@ class DB():
     def update_call_bot(self, column: str, chat_id):
         self.connect.execute(f"UPDATE call_bot SET {column}='{datetime.now()}' WHERE call_bot.chat_id={chat_id};")
         
+    def select_call(self, column, chat_id):
+        result = self.connect.execute(f'SELECT call_bot.{column} FROM call_bot WHERE call_bot.chat_id={chat_id};')
+        return list(result)

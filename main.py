@@ -17,6 +17,8 @@ for event in controller.vk.lp.listen():
             chat_id = get_peer_id(event.message)
             controller.db.add_chat(chat_id)
             controller.db.add_call_bot(chat_id)
-
-        
+        if 'payload' in event.message:
+            print("I'm workin")
+            controller.choice(controller.set_mode(event.message['payload']), get_peer_id(event.message))
+  
 controller.db.connect.close()
