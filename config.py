@@ -1,8 +1,8 @@
-GROUP_ID = "your group ID"
+GROUP_ID = 212216280
 
 KEYBOARD = {}
 
-TOKEN = "access token for your group"
+TOKEN = "67551833ab9353f9013192edf4394ade976f874adddfc5a3a0a87b08005df6ea3235b09390c2714f26fdd"
 
 KEYBOARD = {
     "one_time": False,
@@ -49,11 +49,14 @@ KEYBOARD = {
 
 PIDOR_MESSAGES = ['Кто же тут долбиться в сраку?', 'Проверяю ширину очка каждого', 'Оу, да вам необходимо зашивать...', 'И сегодня пидор - @id{}({} {})']
 
-PRETTY_MESSAGES = ['Красавчики всех стран объединяйтесь!', 'Анализирую красоту по размеру члену/глубине вагины', 'Красавчик сегодня - @id{}({} {})']
+PRETTY_MESSAGES = ['Красавчики всех стран объединяйтесь!', 'Анализирую красоту по размеру члена/глубине вагины', 'Красавчик сегодня - @id{}({} {})']
 
-COMMAND = {
+COMMAND_CHOICE = {
     '{"button":"1"}': (PIDOR_MESSAGES, 'last_call_pid', "Пидора", 'count_pid'), 
     '{"button":"2"}': (PRETTY_MESSAGES, 'last_call_pretty', "Красавчика", 'count_pretty'),
-    '{"button":"3"}': None,
-    '{"button":"4"}': None
+}
+
+COMMAND_TOP = {
+    '{"button":"3"}': ('Топ Пидора:\n', 4),
+    '{"button":"4"}': ("Топ Красавчика:\n", 5)
 }

@@ -10,7 +10,7 @@ class DB():
         self.connect = self.engine.connect()
 
     def add_user(self, first_name, last_name, vk_id, chat_id):
-        self.connect.execute(f"INSERT INTO users(first_name, last_name, vk_id, chat_id) VALUES('{first_name}','{last_name}', '{vk_id}', '{chat_id}');")
+        self.connect.execute(f"INSERT INTO users(first_name, last_name, vk_id, count_pid, count_pretty, chat_id) VALUES('{first_name}','{last_name}', '{vk_id}', 0, 0, '{chat_id}');")
     
     def get_users(self, chat_id):
         users = self.connect.execute(f"SELECT * FROM users WHERE users.chat_id={chat_id};")
@@ -28,3 +28,6 @@ class DB():
     def select_call(self, column, chat_id):
         result = self.connect.execute(f'SELECT call_bot.{column} FROM call_bot WHERE call_bot.chat_id={chat_id};')
         return list(result)
+
+    def update_count(self, column, chat_id, vk_id):
+        self.connect.execute(f"UPDATE users SET {column}={column}+1 WHERE users.chat_id={chat_id} AND users.vk_id={vk_id};")

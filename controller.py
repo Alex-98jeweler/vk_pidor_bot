@@ -24,16 +24,13 @@ class Controller:
             self.db.add_user(i['first_name'], i['last_name'], i['id'], chat_id)
 
 
-    def set_mode(self, command):
-        return COMMAND[command] 
-
-
     def __gen_random_user(self, chat_id):
         try:
             a = self.db.get_users(chat_id)
             b = a[0]
         except IndexError:
             self.__init_chat_members_list(chat_id)
+            self.db.add_call_bot(chat_id)
             print('Я исключение')
             return self.__gen_random_user(chat_id)
         num = randint(0, len(a) - 1)
@@ -41,27 +38,53 @@ class Controller:
 
     
     def choice(self, command, chat_id):
-        messages, mode, name = command
-        print(messages[0])
+        messages, column_call, name, column_count = command
         user = self.__gen_random_user(chat_id)
-        self.__add_change(chat_id, mode)
-        if self.__check_call(mode, chat_id):
+        if self.__check_call(column_call, chat_id):
             for i in messages:
                 if messages.index(i) == len(messages) - 1:
                     self.vk.send_message(chat_id, i.format(user[3], user[1], user[2]))
                 else:
                     self.vk.send_message(chat_id, i)
                     sleep(1)
+            self.__add_change(chat_id, column_call)
+            self.db.update_count(column_count, chat_id, user[3])
         else:
-            self.vk.send_message(chat_id, f"{name} можно определить через сутки")
+            self.vk.send_message(chat_id, f"{name} можно определить один раз сутки")
+
 
     def __add_change(self, chat_id, column):
         self.db.update_call_bot(column, chat_id)
 
+
     def __check_call(self, column, chat_id):
         result = self.db.select_call(column, chat_id)[0][0]
-        if datetime.fromisoformat(result) > datetime.now() + timedelta(days=1):
-            return True
+        check = None
+        if datetime.now() < (datetime.fromisoformat(result) + timedelta(days=1)):
+            check = False
         else:
-            return False
-                  
+            check = True
+        return check
+
+    def get_top(self, chat_id, command):
+        top, sort_index = command
+        users = self.db.get_users(chat_id)
+        users.sort(key= lambda x: x[sort_index], reverse=True)
+        message = ''
+        num = 1
+        for i in users:
+            word = "раз"
+            if i[sort_index] == 2 or i[sort_index] == 3 or i[sort_index] == 4:
+                word = 'раза'
+            message += f"\n{num}. @id{i[3]}({i[1]} {i[2]})  -  {i[sort_index]} {word}"
+            num += 1
+        top = top + message
+        self.vk.send_message(chat_id, top)
+
+    def run(self, payload, chat_id):
+        if payload in COMMAND_CHOICE:
+            self.choice(COMMAND_CHOICE[payload], chat_id)
+        elif payload in COMMAND_TOP:
+            self.get_top(chat_id, COMMAND_TOP[payload])
+        
+               
