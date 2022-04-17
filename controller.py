@@ -82,7 +82,7 @@ class Controller:
             word = "раз"
             if i[sort_index] == 2 or i[sort_index] == 3 or i[sort_index] == 4:
                 word = 'раза'
-            message += f"\n{num}. @id{i[3]}({i[1]} {i[2]})  -  {i[sort_index]} {word}"
+            message += f"\n{num}. {i[1]} {i[2]}  -  {i[sort_index]} {word}"
             num += 1
         top = top + message
         self.vk.send_message(chat_id, top)
