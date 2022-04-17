@@ -1,7 +1,8 @@
-from calendar import c
 from datetime import datetime, timedelta
 from random import randint
-from time import sleep
+import re
+from time import sleep, time
+import time
 from config import *
 from db import DB
 from parser import get_users
@@ -50,7 +51,12 @@ class Controller:
             self.__add_change(chat_id, column_call)
             self.db.update_count(column_count, chat_id, user[3])
         else:
-            self.vk.send_message(chat_id, f"{name} можно определить один раз сутки")
+            result = self.db.select_call(column_call, chat_id)[0][0]
+            result = datetime.fromisoformat(result)
+            result = result + timedelta(days=1)
+            result = result - datetime.now()
+            result = datetime.strptime(str(result), "%H:%M:%S.%f")
+            self.vk.send_message(chat_id, f"{name} можно определить через {result.hour}ч:{result.minute}м:{result.second}с")
 
 
     def __add_change(self, chat_id, column):

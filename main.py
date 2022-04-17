@@ -1,3 +1,5 @@
+import requests
+
 from controller import Controller
 from config import KEYBOARD
 from parser import get_peer_id
@@ -23,6 +25,8 @@ def main():
                     controller.run(event.message['payload'], get_peer_id(event.message))
     except KeyboardInterrupt:
         print("До скорой встречи:D")
+    except requests.exceptions.ReadTimeout:
+        main()
 
   
     controller.db.connect.close()
